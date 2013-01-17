@@ -30,5 +30,6 @@ require("tabs").on("close", function(tab) {
     console.log("tab closed", tab);
 });
 
+require("backend").start();
 
 console.log("The add-on is running.");

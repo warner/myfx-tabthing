@@ -15,12 +15,12 @@ exports.start = function() {
 
     worker = require("page-worker").Page({
         contentUrl: data.url("worker.html"),
-        contentScriptfile: data.url("worker.js")
+        contentScriptfile: data.url("addon-comms.js")
     });
-    worker.on("value", function(val) {
+    worker.on("from-content", function(val) {
         console.log("from db", JSON.stringify(val));
     });
-    worker.port.emit("set", "early data");
+    worker.port.emit("to-content", "early data");
 
 };
 

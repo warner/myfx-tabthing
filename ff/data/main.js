@@ -6,7 +6,17 @@ var sendToBackend;
 
 function msgFromBackend(name, data) {
     console.log("msgFromBackend", name, data);
-    $("div#tabs ul").append($("<li>").text(JSON.stringify(data)));
+    if (name == "tabs") {
+        var ul = $("div#tabs ul");
+        ul.empty();
+        data.forEach(function(tab) {
+            var title = tab.title || "(no title)";
+            var t = $("#templates>.tab-entry").clone();
+            t.find("a").attr("href", tab.url);
+            t.find("a").text(title);
+            ul.append(t);
+        });
+    }
 }
 
 

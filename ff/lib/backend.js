@@ -6,6 +6,7 @@ exports.start = function() {
     console.log("starting DB");
     db = new Firebase("https://warner.firebaseio.com/tabthing");
     db.on("value", function(ss) {
+        require("./comms").sendToAll("tabs", ss.val());
         console.log("new fb data", ss.val());
     });
     console.log("DB connection created");

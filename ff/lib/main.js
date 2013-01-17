@@ -4,6 +4,20 @@ const data = require("self").data;
 
 require("./comms").setupComms();
 
+require("backend").start();
+
+function updateAllTabs() {
+    var data = [];
+    for each (var tab in tabs)
+        data.push({url: tab.url, title: tab.title});
+    require("./comms").sendToAll("tabs", data);
+    require("backend").set(data);
+}
+
+require("tabs").on("ready", updateAllTabs);
+require("tabs").on("close", updateAllTabs);
+updateAllTabs();
+
 widgets.Widget({
   id: "show-tabthing",
   label: "Show Tabs From Other Computers",
@@ -21,15 +35,5 @@ widgets.Widget({
     require("backend").poke();
   }
 });
-
-require("tabs").on("ready", function(tab) {
-    console.log("tab loaded", tab.title, tab.url);
-});
-
-require("tabs").on("close", function(tab) {
-    console.log("tab closed", tab);
-});
-
-require("backend").start();
 
 console.log("The add-on is running.");

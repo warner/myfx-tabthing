@@ -50,4 +50,20 @@ $(function() {
 
 function mainSetup() {
     console.log("mainSetup");
+    $("#enabled").hide();
+    $("#not-enabled").show();
+    $("#enable").on("click", function(e) {
+        var db = new Firebase("https://warner.firebaseio.com/tabthing");
+        var authClient = new FirebaseAuthClient(db);
+        authClient.login("persona", function(error, token, user) {
+            if (error) {
+                $("#error").text(error);
+            } else {
+                sendToBackend("fb-login", {token: token, user: user});
+                $("#not-enabled").hide();
+                $("#enabled").show();
+                $("#user").text(user);
+            }
+        });
+    });
 };

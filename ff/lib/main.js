@@ -28,23 +28,9 @@ widgets.Widget({
   contentURL: data.url("icons/tab-new-6.png"),
   onClick: function() {
     //tabs.open(data.url("main.html"));
-      tabs.open("http://localhost:8078/main.html");
+      tabs.open("http://myfx-tabthing.lothar.com/main.html");
   }
 });
-
-var {startServerAsync} = require("sdk/test/httpd");
-// files that are served to the frontend panel
-var server = startServerAsync(8078);
-function serveFile(req, resp) {
-    var contents = data.load(req.path.slice(1));
-    if (contents.length)
-        resp.write(contents); // writing empty string is an error
-}
-var staticFiles = ["firebase.js", "jquery-1.9.0.js", "main.html", "main.js",
-                   "css/main.css"];
-for each (var f in staticFiles) {
-    server.registerPathHandler("/"+f, serveFile);
-};
 
 widgets.Widget({
   id: "click",

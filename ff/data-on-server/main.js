@@ -113,7 +113,9 @@ function doP() {
                                  }else {
                                      var token = response["token"];
                                      var user = response["user"];
+                                     console.log("calling attemptAuth");
                                      authClient.attemptAuth(token, user, callback);
+                                     console.log("called attemptAuth");
                                  }
                              });
             console.log("did authClient.jsonp");
@@ -133,6 +135,6 @@ function mainSetup() {
     $("#error").hide();
     $("#sign-in").show();
     $("#logged-in").hide();
-    //$("#sign-in").on("click", doFBPersonaAuth);
-    $("#sign-in").on("click", doP);
+    $("#sign-in").on("click", doFBPersonaAuth);
+    //$("#sign-in").on("click", doP);
 };

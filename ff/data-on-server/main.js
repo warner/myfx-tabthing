@@ -65,7 +65,7 @@ function mainSetup() {
                 sendToBackend("fb-login", {token: token, user: user});
                 $("#not-enabled").hide();
                 $("#enabled").show();
-                $("#user").text(user);
+                $("#user").text(user.id); // also .email, .hash, .provider
             }
         });
     });

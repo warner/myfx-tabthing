@@ -8,13 +8,22 @@ span#user {
 }
 
 div.tabs ul {
-    max-width: 50%;
+}
+
+li.device-entry {
+    background: #efe;
+    border-radius: 10px;
+    border: 1px solid #888;
+    max-width: 60%;
+    padding: 3px; /* between text and edge of box */
+    margin: 5px; /* between devices */
 }
 
 li.tab-entry {
     background: #eee;
-    border: 1px dashed #888;
-    padding: 2px;
-    margin: 2px;
-    border-radius: 5px;
+    border: 1px solid #bbb;
+    max-width: 90%;
+    padding: 3px;
+    margin: 5px;
+    border-radius: 8px;
 }

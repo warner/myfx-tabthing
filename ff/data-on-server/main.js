@@ -29,7 +29,8 @@ function msgFromBackend(name, data) {
     if (name == "auth-success") {
         $("#sign-in").hide();
         $("#user").text(data.user.email); // also .id, .hash, .provider
-        $("#my-device-name").val(data.device);
+        //$("#my-device-name").val(data.device);
+        $("#name-this-device").empty().text("Device name: "+data.device);
         $("#logged-in").show();
     }
     console.log("done");

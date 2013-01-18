@@ -46,7 +46,7 @@ var allTabs;
 
 exports.controlPageAdded = function() {
     if (authed)
-        sendToAll("auth-success");
+        sendToAll("auth-success", authed);
     if (allTabs)
         sendToAll("tabs", allTabs);
 };
@@ -63,7 +63,7 @@ exports.fromContent = function(send, name, data) {
         console.log("DB connection created");
         tmpdb.auth(data.token, function(success) {
             if (success) {
-                authed = true;
+                authed = data;
                 sendToAll("auth-success", data);
                 var userTabsDB = tmpdb.child(data.user.id);
                 userTabsDB.on("value", function(ss) {

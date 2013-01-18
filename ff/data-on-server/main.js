@@ -7,7 +7,7 @@ var sendToBackend;
 function msgFromBackend(name, data) {
     console.log("msgFromBackend", name, data);
     if (name == "tabs") {
-        var ul = $("div#tabs ul");
+        var ul = $("div#tabs > ul");
         ul.empty();
         var devices = Object.keys(data);
         devices.sort();

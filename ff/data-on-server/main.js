@@ -100,12 +100,14 @@ function doP() {
     function onlogin(assertion) {
         console.log("onlogin", assertion);
         var db = new Firebase("https://warner.firebaseio.com/tabthing");
-        console.log("created DB reference");
+        console.log("created DB reference", db);
         try {
             var authClient = new FirebaseAuthClient(db);
+            console.log("created authClient", authClient);
             authClient.jsonp("/auth/persona/authenticate",
                              {"assertion":assertion},
                              function(error, response) {
+                                 console.log("jsonp returned", error, response);
                                  if(error || !response["token"]) {
                                      callback(error);
                                  }else {
@@ -114,6 +116,7 @@ function doP() {
                                      authClient.attemptAuth(token, user, callback);
                                  }
                              });
+            console.log("did authClient.jsonp");
         } catch(e) {
             console.log("error", e);
         }

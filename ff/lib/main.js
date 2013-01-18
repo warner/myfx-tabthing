@@ -37,7 +37,7 @@ var {startServerAsync} = require("sdk/test/httpd");
 var server = startServerAsync(8078);
 function serveFile(req, resp) {
     var contents = data.load(req.path.slice(1));
-    if (contents)
+    if (contents.length)
         resp.write(contents); // writing empty string is an error
 }
 var staticFiles = ["firebase.js", "jquery-1.9.0.js", "main.html", "main.js",

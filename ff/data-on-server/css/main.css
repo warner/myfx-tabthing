@@ -1,4 +1,16 @@
 
+div#error {
+    background: #fee;
+}
+
+span#user {
+    font-family: "Courier New",Courier,monospace;
+}
+
+div.tabs ul {
+    max-width: 50%;
+}
+
 li.tab-entry {
     background: #eee;
     border: 1px dashed #888;

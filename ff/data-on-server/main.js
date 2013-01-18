@@ -51,21 +51,32 @@ $(function() {
     window.setTimeout(mainSetup, 0);
 });
 
+function showError(text) {
+    $("#error").show().text(text);
+}
+
 function mainSetup() {
     console.log("mainSetup");
-    $("#enabled").hide();
-    $("#not-enabled").show();
-    $("#signin").on("click", function(e) {
+    $("#error").hide();
+    $("#sign-in").show();
+    $("#logged-in").hide();
+    $("#sign-in").on("click", function(e) {
+        console.log("about to authClient");
         var db = new Firebase("https://warner.firebaseio.com/tabthing");
+        console.log("created DB reference");
         var authClient = new FirebaseAuthClient(db);
+        console.log("created authClient");
         authClient.login("persona", function(error, token, user) {
-            if (error) {
-                $("#error").text(error);
-            } else {
-                sendToBackend("fb-login", {token: token, user: user});
-                $("#not-enabled").hide();
-                $("#enabled").show();
+            console.log("authClient.login done", error, token, user);
+            if (error) showError(error);
+            else {
+                $("#sign-in").hide();
                 $("#user").text(user.email); // also .id, .hash, .provider
+                $("#logged-in").show();
+                var device = $("#device-name").val();
+                sendToBackend("fb-login", {token: token,
+                                           user: user,
+                                           device: device});
             }
         });
     });

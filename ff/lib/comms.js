@@ -3,7 +3,13 @@ var controlPages = [];
 
 exports.sendToAll = function(name, data) {
     function sendToWorker(worker) {
-        worker.port.emit("to-content", {name: name, data: data||{}});
+        try {
+            worker.port.emit("to-content", {name: name, data: data||{}});
+        } catch(e) {
+            // this happens when reloading a control-page. I think the
+            // tab.onready triggers a sendToAll while the page is unavailable
+            console.log("error while sending to-content", e);
+        }
     }
     controlPages.forEach(sendToWorker);
 };

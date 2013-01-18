@@ -46,7 +46,7 @@ var allTabs;
 
 exports.controlPageAdded = function() {
     if (authed)
-        sendToAll("auth", "success");
+        sendToAll("auth-success");
     if (allTabs)
         sendToAll("tabs", allTabs);
 };

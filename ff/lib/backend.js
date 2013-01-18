@@ -20,6 +20,15 @@ require("sdk/system/unload").when(function(why) {
     shuttingDown = true;
 });
 
+var watchingTabs = false;
+function startWatchingTabs() {
+    if (watchingTabs)
+        return;
+    require("tabs").on("ready", myTabsWereModified);
+    require("tabs").on("close", myTabsWereModified);
+    myTabsWereModified();
+}
+
 var deviceTabsDB;
 
 function myTabsWereModified() {
@@ -32,25 +41,38 @@ function myTabsWereModified() {
     deviceTabsDB.set(data);
 }
 
+var authed;
+var allTabs;
+
+exports.controlPageAdded = function() {
+    if (authed)
+        sendToAll("auth", "success");
+    if (allTabs)
+        sendToAll("tabs", allTabs);
+};
 
 exports.fromContent = function(send, name, data) {
     console.log("fromContent", name, data);
     if (name == "fb-login") {
+        if (authed) {
+            console.log("already authed, ignoring");
+            return;
+        }
         console.log("starting DB");
         var tmpdb = new Firebase("https://warner.firebaseio.com/tabthing");
         console.log("DB connection created");
         tmpdb.auth(data.token, function(success) {
             if (success) {
-                sendToAll("auth", "success");
+                authed = true;
+                sendToAll("auth-success", data);
                 var userTabsDB = tmpdb.child(data.user.id);
                 userTabsDB.on("value", function(ss) {
+                    allTabs = ss.val();
                     sendToAll("tabs", ss.val());
                     console.log("new fb data", ss.val());
                 });
                 deviceTabsDB = userTabsDB.child(data.device);
-                require("tabs").on("ready", myTabsWereModified);
-                require("tabs").on("close", myTabsWereModified);
-                myTabsWereModified();
+                startWatchingTabs();
             } else {
                 sendToAll("auth", "failed");
             }

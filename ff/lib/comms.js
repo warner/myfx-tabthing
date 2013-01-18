@@ -32,6 +32,7 @@ function addControlPage(worker) {
                       controlPages.splice(index, 1);
                   //console.log("now "+controlPages.length+" workers");
                   });
+    backend.controlPageAdded();
 };
 
 const pagemod = require("page-mod");

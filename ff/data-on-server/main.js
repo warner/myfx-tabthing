@@ -26,8 +26,11 @@ function msgFromBackend(name, data) {
             });
         });
     }
-    if (name == "auth") {
-        // ignored
+    if (name == "auth-success") {
+        $("#sign-in").hide();
+        $("#user").text(data.user.email); // also .id, .hash, .provider
+        $("#my-device-name").val(data.device);
+        $("#logged-in").show();
     }
     console.log("done");
 }
@@ -79,15 +82,11 @@ function mainSetup() {
         authClient.login("persona", function(error, token, user) {
             console.log("authClient.login done", error, token, user);
             if (error) showError(error);
-            else {
-                $("#sign-in").hide();
-                $("#user").text(user.email); // also .id, .hash, .provider
-                $("#logged-in").show();
-                var device = $("#my-device-name").val();
+            else
                 sendToBackend("fb-login", {token: token,
                                            user: user,
-                                           device: device});
-            }
+                                           device: $("#my-device-name").val()
+                                          });
         });
     });
 };

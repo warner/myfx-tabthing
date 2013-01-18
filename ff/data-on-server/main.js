@@ -9,17 +9,30 @@ function msgFromBackend(name, data) {
     if (name == "tabs") {
         var ul = $("div#tabs ul");
         ul.empty();
-        data.forEach(function(tab) {
-            var title = tab.title || "(no title)";
-            var t = $("#templates>.tab-entry").clone();
-            t.find("a").attr("href", tab.url);
-            t.find("a").text(title);
-            ul.append(t);
+        var devices = Object.keys(data);
+        devices.sort();
+        devices.forEach(function(deviceName) {
+            var tabs = data[deviceName];
+            var dul = $("#templates>.device-entry").clone();
+            dul.find("span.device-name").text(deviceName);
+            ul.append(dul);
+            var tul = dul.find("ul.device-tabs");
+            console.log("tul", tul);
+            tabs.forEach(function(tab) {
+                //console.log("loop", tab);
+                var title = tab.title || "(no title)";
+                var t = $("#templates>.tab-entry").clone();
+                t.find("a").attr("href", tab.url);
+                t.find("a").text(title);
+                console.log("appending", t, "to", tul);
+                tul.append(t);
+            });
         });
     }
     if (name == "auth") {
         // ignored
     }
+    console.log("done");
 }
 
 
@@ -73,7 +86,7 @@ function mainSetup() {
                 $("#sign-in").hide();
                 $("#user").text(user.email); // also .id, .hash, .provider
                 $("#logged-in").show();
-                var device = $("#device-name").val();
+                var device = $("#my-device-name").val();
                 sendToBackend("fb-login", {token: token,
                                            user: user,
                                            device: device});

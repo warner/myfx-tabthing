@@ -3,13 +3,12 @@ const tabs = require("tabs");
 const Firebase = require("./firebase-jetpack").Firebase;
 var sendToAll = require("./comms").sendToAll;
 
-var db;
-
 var counter = 0;
 exports.poke = function() {
     console.log("poke");
     counter += 1;
     sendToAll("poke", {pokey: "poked"});
+    myTabsWereModified();
     console.log("poked");
 };
 
@@ -21,6 +20,8 @@ require("sdk/system/unload").when(function(why) {
     shuttingDown = true;
 });
 
+var deviceTabsDB;
+
 function myTabsWereModified() {
     if (shuttingDown)
         return;
@@ -28,24 +29,25 @@ function myTabsWereModified() {
     for each (var tab in tabs)
         data.push({url: tab.url, title: tab.title});
     console.log("calling db.set");
-    db.set(data);
+    deviceTabsDB.set(data);
 }
-
 
 
 exports.fromContent = function(send, name, data) {
     console.log("fromContent", name, data);
     if (name == "fb-login") {
         console.log("starting DB");
-        db = new Firebase("https://warner.firebaseio.com/tabthing");
+        var tmpdb = new Firebase("https://warner.firebaseio.com/tabthing");
         console.log("DB connection created");
-        db.auth(data.token, function(success) {
+        tmpdb.auth(data.token, function(success) {
             if (success) {
                 sendToAll("auth", "success");
-                db.on("value", function(ss) {
+                var userTabsDB = tmpdb.child(data.user.id);
+                userTabsDB.on("value", function(ss) {
                     sendToAll("tabs", ss.val());
                     console.log("new fb data", ss.val());
                 });
+                deviceTabsDB = userTabsDB.child(data.device);
                 require("tabs").on("ready", myTabsWereModified);
                 require("tabs").on("close", myTabsWereModified);
                 myTabsWereModified();

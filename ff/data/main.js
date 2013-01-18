@@ -17,6 +17,9 @@ function msgFromBackend(name, data) {
             ul.append(t);
         });
     }
+    if (name == "auth") {
+        // ignored
+    }
 }
 
 
@@ -52,7 +55,7 @@ function mainSetup() {
     console.log("mainSetup");
     $("#enabled").hide();
     $("#not-enabled").show();
-    $("#enable").on("click", function(e) {
+    $("#signin").on("click", function(e) {
         var db = new Firebase("https://warner.firebaseio.com/tabthing");
         var authClient = new FirebaseAuthClient(db);
         authClient.login("persona", function(error, token, user) {

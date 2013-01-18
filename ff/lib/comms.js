@@ -12,14 +12,15 @@ const backend = require("./backend");
 
 function addControlPage(worker) {
     controlPages.push(worker);
-    console.log("ff-tt control panel (#"+controlPages.length+") opened");
+    //console.log("ff-tt control panel (#"+controlPages.length+") opened");
     function send(name, data) {
         //console.log("send", name, data);
         worker.port.emit("to-content", {name: name, data: data||{}});
     }
     worker.port.on("from-content", function (data) {
-                       backend.fromContent(send, data.name, data.data);
-                       });
+        //console.log("comms.from-content", JSON.stringify(data));
+        backend.fromContent(send, data.name, data.data);
+    });
 
     //XXX.sendToAllContent("hello content", {foo: "baz"});
 
@@ -36,7 +37,8 @@ function addControlPage(worker) {
 const pagemod = require("page-mod");
 const data = require("self").data;
 exports.setupComms = function() {
-    pagemod.PageMod({ include: data.url("main.html"),
+    pagemod.PageMod({ include: //data.url("main.html"),
+                      "http://localhost:8078/main.html",
                       contentScriptFile: data.url("addon-comms.js"),
                       contentScriptWhen: "end",
                       onAttach: addControlPage

@@ -17,14 +17,11 @@ function msgFromBackend(name, data) {
             dul.find("span.device-name").text(deviceName);
             ul.append(dul);
             var tul = dul.find("ul.device-tabs");
-            console.log("tul", tul);
             tabs.forEach(function(tab) {
-                //console.log("loop", tab);
                 var title = tab.title || "(no title)";
                 var t = $("#templates>.tab-entry").clone();
                 t.find("a").attr("href", tab.url);
                 t.find("a").text(title);
-                console.log("appending", t, "to", tul);
                 tul.append(t);
             });
         });

@@ -41,7 +41,7 @@ function serveFile(req, resp) {
         resp.write(contents); // writing empty string is an error
 }
 var staticFiles = ["firebase.js", "jquery-1.9.0.js", "main.html", "main.js",
-                   "css/main.css", "plain_sign_in_black.png"];
+                   "css/main.css"];
 for each (var f in staticFiles) {
     server.registerPathHandler("/"+f, serveFile);
 };

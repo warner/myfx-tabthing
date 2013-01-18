@@ -68,25 +68,67 @@ function showError(text) {
     $("#error").show().text(text);
 }
 
+
+function doFBPersonaAuth() {
+    console.log("about to authClient");
+    var db = new Firebase("https://warner.firebaseio.com/tabthing");
+    console.log("created DB reference");
+    var authClient = new FirebaseAuthClient(db);
+    console.log("created authClient");
+    authClient.login("persona", function(error, token, user) {
+        console.log("authClient.login done", error, token, user);
+        if (error) showError(error);
+        else
+            sendToBackend("fb-login", {token: token,
+                                       user: user,
+                                       device: $("#my-device-name").val()
+                                      });
+    });
+}
+
+function doP() {
+    function callback(error, token, user) {
+        console.log("authClient.login done", error, token, user);
+        if (error) showError(error);
+        else
+            sendToBackend("fb-login", {token: token,
+                                       user: user,
+                                       device: $("#my-device-name").val()
+                                      });
+    }
+    function onlogin(assertion) {
+        console.log("onlogin", assertion);
+        var db = new Firebase("https://warner.firebaseio.com/tabthing");
+        console.log("created DB reference");
+        try {
+            var authClient = new FirebaseAuthClient(db);
+            authClient.jsonp("/auth/persona/authenticate",
+                             {"assertion":assertion},
+                             function(error, response) {
+                                 if(error || !response["token"]) {
+                                     callback(error);
+                                 }else {
+                                     var token = response["token"];
+                                     var user = response["user"];
+                                     authClient.attemptAuth(token, user, callback);
+                                 }
+                             });
+        } catch(e) {
+            console.log("error", e);
+        }
+    }
+
+    navigator.id.watch({"onlogin": onlogin,
+                        "onlogout": function(){}
+                       });
+    navigator.id.request();
+}
+
 function mainSetup() {
     console.log("mainSetup");
     $("#error").hide();
     $("#sign-in").show();
     $("#logged-in").hide();
-    $("#sign-in").on("click", function(e) {
-        console.log("about to authClient");
-        var db = new Firebase("https://warner.firebaseio.com/tabthing");
-        console.log("created DB reference");
-        var authClient = new FirebaseAuthClient(db);
-        console.log("created authClient");
-        authClient.login("persona", function(error, token, user) {
-            console.log("authClient.login done", error, token, user);
-            if (error) showError(error);
-            else
-                sendToBackend("fb-login", {token: token,
-                                           user: user,
-                                           device: $("#my-device-name").val()
-                                          });
-        });
-    });
+    //$("#sign-in").on("click", doFBPersonaAuth);
+    $("#sign-in").on("click", doP);
 };

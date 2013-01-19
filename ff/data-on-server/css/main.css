@@ -24,6 +24,10 @@ li.device-entry.my-device {
     max-width: 55%;
 }
 
+li.device-entry.offline span.if-online {
+    display: none;
+}
+
 li.tab-entry {
     background: #eee;
     border: 1px solid #bbb;

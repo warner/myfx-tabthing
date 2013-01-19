@@ -13,11 +13,16 @@ function msgFromBackend(name, data) {
         var devices = Object.keys(data);
         devices.sort();
         devices.forEach(function(deviceName) {
-            var tabs = data[deviceName];
+            var online = data[deviceName].online;
+            var tabs = data[deviceName].tabs;
             var dul = $("#templates>.device-entry").clone();
             dul.find("span.device-name").text(deviceName);
             if (deviceName == myDeviceName)
                 dul.addClass("my-device");
+            if (online)
+                dul.addClass("online");
+            else
+                dul.addClass("offline");
             ul.append(dul);
             var tul = dul.find("ul.device-tabs");
             tabs.forEach(function(tab) {

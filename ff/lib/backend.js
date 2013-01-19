@@ -67,7 +67,10 @@ exports.fromContent = function(send, name, data) {
                     sendToAll("tabs", ss.val());
                     console.log("new fb data", ss.val());
                 });
-                deviceTabsDB = userTabsDB.child(data.device);
+                var deviceDB = userTabsDB.child(data.device);
+                deviceDB.child("online").setOnDisconnect(false);
+                deviceDB.child("online").set(true);
+                deviceTabsDB = deviceDB.child("tabs");
                 startWatchingTabs();
             } else {
                 sendToAll("auth", "failed");

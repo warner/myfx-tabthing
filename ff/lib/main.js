@@ -14,13 +14,4 @@ widgets.Widget({
   }
 });
 
-widgets.Widget({
-  id: "click",
-  label: "poke control panel",
-  contentURL: data.url("icons/text-speak.png"),
-  onClick: function() {
-    require("backend").poke();
-  }
-});
-
 console.log("The add-on is running.");

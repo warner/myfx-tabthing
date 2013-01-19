@@ -3,15 +3,6 @@ const tabs = require("tabs");
 const Firebase = require("./firebase-jetpack").Firebase;
 var sendToAll = require("./comms").sendToAll;
 
-var counter = 0;
-exports.poke = function() {
-    console.log("poke");
-    counter += 1;
-    sendToAll("poke", {pokey: "poked"});
-    myTabsWereModified();
-    console.log("poked");
-};
-
 
 var shuttingDown = false;
 

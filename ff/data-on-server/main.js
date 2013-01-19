@@ -25,6 +25,10 @@ function msgFromBackend(name, data) {
                 var t = $("#templates>.tab-entry").clone();
                 t.find("a").attr("href", tab.url);
                 t.find("a").text(title);
+                if (tab.faviconURL)
+                    t.find("img.tab-favicon").attr("src", tab.faviconURL);
+                else
+                    t.find("img.tab-favicon").remove();
                 tul.append(t);
             });
         });

@@ -37,3 +37,8 @@ li.device-entry.my-device li.tab-entry {
     background: #888;
     border: 1px solid #777;
 }
+
+li.tab-entry img {
+    margin-left: 2px;
+    margin-right: 2px;
+}

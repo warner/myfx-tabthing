@@ -1,0 +1,10 @@
+{
+    "rules": {
+        "tabthing": {
+            "$userid": {
+                ".read": "$userid == auth.id",
+                ".write": "$userid == auth.id",
+            }
+        }
+    }
+}

@@ -19,6 +19,11 @@ li.device-entry {
     margin: 5px; /* between devices */
 }
 
+li.device-entry.my-device {
+    background: #898;
+    max-width: 55%;
+}
+
 li.tab-entry {
     background: #eee;
     border: 1px solid #bbb;
@@ -26,4 +31,9 @@ li.tab-entry {
     padding: 3px;
     margin: 5px;
     border-radius: 8px;
+}
+
+li.device-entry.my-device li.tab-entry {
+    background: #888;
+    border: 1px solid #777;
 }

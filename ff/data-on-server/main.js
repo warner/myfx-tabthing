@@ -3,6 +3,7 @@
  in the usual web-content context. */
 
 var sendToBackend;
+var myDeviceName;
 
 function msgFromBackend(name, data) {
     console.log("msgFromBackend", name, data);
@@ -15,6 +16,8 @@ function msgFromBackend(name, data) {
             var tabs = data[deviceName];
             var dul = $("#templates>.device-entry").clone();
             dul.find("span.device-name").text(deviceName);
+            if (deviceName == myDeviceName)
+                dul.addClass("my-device");
             ul.append(dul);
             var tul = dul.find("ul.device-tabs");
             tabs.forEach(function(tab) {
@@ -31,6 +34,7 @@ function msgFromBackend(name, data) {
         $("#user").text(data.user.email); // also .id, .hash, .provider
         //$("#my-device-name").val(data.device);
         $("#name-this-device").empty().text("Device name: "+data.device);
+        myDeviceName = data.device;
         $("#logged-in").show();
     }
     console.log("done");

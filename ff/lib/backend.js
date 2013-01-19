@@ -35,8 +35,10 @@ function myTabsWereModified() {
     if (shuttingDown)
         return;
     var data = [];
-    for each (var tab in tabs)
-        data.push({url: tab.url, title: tab.title});
+    for each (var tab in tabs) {
+        if (tab.url != "about:blank")
+            data.push({url: tab.url, title: tab.title});
+    }
     console.log("calling db.set");
     deviceTabsDB.set(data);
 }

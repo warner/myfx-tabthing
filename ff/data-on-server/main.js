@@ -7,6 +7,22 @@ var myDeviceName;
 
 function msgFromBackend(name, data) {
     console.log("msgFromBackend", name, data);
+
+    if (name == "deviceName") {
+        $("#my-device-name").val(data);
+        myDeviceName = data;
+        console.log("set device name");
+    }
+
+    if (name == "auth-success") {
+        $("#sign-in").hide();
+        $("#user").text(data.user.email); // also .id, .hash, .provider
+        //$("#my-device-name").val(data.device);
+        $("#name-this-device").empty().text("Device name: "+data.device);
+        myDeviceName = data.device;
+        $("#logged-in").show();
+    }
+
     if (name == "tabs") {
         var ul = $("div#tabs > ul");
         ul.empty();
@@ -37,14 +53,6 @@ function msgFromBackend(name, data) {
                 tul.append(t);
             });
         });
-    }
-    if (name == "auth-success") {
-        $("#sign-in").hide();
-        $("#user").text(data.user.email); // also .id, .hash, .provider
-        //$("#my-device-name").val(data.device);
-        $("#name-this-device").empty().text("Device name: "+data.device);
-        myDeviceName = data.device;
-        $("#logged-in").show();
     }
     console.log("done");
 }
@@ -150,4 +158,5 @@ function mainSetup() {
     $("#logged-in").hide();
     $("#sign-in").on("click", doFBPersonaAuth);
     //$("#sign-in").on("click", doP);
+    sendToBackend("page-ready");
 };

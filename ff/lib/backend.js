@@ -37,18 +37,21 @@ function myTabsWereModified() {
     deviceTabsDB.set(data);
 }
 
+var storage = require("sdk/simple-storage").storage;
 var authed;
 var allTabs;
 
-exports.controlPageAdded = function() {
-    if (authed)
-        sendToAll("auth-success", authed);
-    if (allTabs)
-        sendToAll("tabs", allTabs);
-};
-
 exports.fromContent = function(send, name, data) {
     console.log("fromContent", name, data);
+    if (name == "page-ready") {
+        if (storage.deviceName)
+            send("deviceName", storage.deviceName);
+        if (authed)
+            send("auth-success", authed);
+        if (allTabs)
+            send("tabs", allTabs);
+    }
+
     if (name == "fb-login") {
         if (authed) {
             console.log("already authed, ignoring");
@@ -60,6 +63,7 @@ exports.fromContent = function(send, name, data) {
         tmpdb.auth(data.token, function(success) {
             if (success) {
                 authed = data;
+                storage.deviceName = data.device;
                 sendToAll("auth-success", data);
                 var userTabsDB = tmpdb.child(data.user.id);
                 userTabsDB.on("value", function(ss) {

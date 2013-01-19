@@ -14,7 +14,6 @@ function msgFromBackend(name, data) {
         devices.sort();
         devices.forEach(function(deviceName) {
             var online = data[deviceName].online;
-            var tabs = data[deviceName].tabs;
             var dul = $("#templates>.device-entry").clone();
             dul.find("span.device-name").text(deviceName);
             if (deviceName == myDeviceName)
@@ -25,10 +24,11 @@ function msgFromBackend(name, data) {
                 dul.addClass("offline");
             ul.append(dul);
             var tul = dul.find("ul.device-tabs");
+            var tabs = data[deviceName].tabs || [];
             tabs.forEach(function(tab) {
                 var title = tab.title || "(no title)";
                 var t = $("#templates>.tab-entry").clone();
-                t.find("a").attr("href", tab.url);
+                t.find("a").attr("href", tab.url).attr("target", "_blank");
                 t.find("a").text(title);
                 if (tab.faviconURL)
                     t.find("img.tab-favicon").attr("src", tab.faviconURL);

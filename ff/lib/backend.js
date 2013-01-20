@@ -20,6 +20,12 @@ function startWatchingTabs() {
     myTabsWereModified();
 }
 
+var deviceInfo;
+exports.setDeviceInfo = function(info) {
+    console.log("settning deviceInfo", JSON.stringify(info));
+    deviceInfo = info;
+};
+
 var deviceTabsDB;
 
 function myTabsWereModified() {
@@ -33,7 +39,7 @@ function myTabsWereModified() {
                        faviconURL: tab.favicon
                       });
     }
-    console.log("calling db.set");
+    //console.log("calling db.set", data);
     deviceTabsDB.set(data);
 }
 
@@ -44,8 +50,8 @@ var allTabs;
 exports.fromContent = function(send, name, data) {
     console.log("fromContent", name, data);
     if (name == "page-ready") {
-        if (storage.deviceName)
-            send("deviceName", storage.deviceName);
+        if (deviceInfo)
+            send("device-info", deviceInfo);
         if (authed)
             send("auth-success", authed);
         if (allTabs)
@@ -63,17 +69,21 @@ exports.fromContent = function(send, name, data) {
         tmpdb.auth(data.token, function(success) {
             if (success) {
                 authed = data;
-                storage.deviceName = data.device;
                 sendToAll("auth-success", data);
+                // the page-ready message isn't sent on reload, so resend
+                // device-info now as a workaround
+                sendToAll("device-info", deviceInfo);
                 var userTabsDB = tmpdb.child(data.user.id);
                 userTabsDB.on("value", function(ss) {
                     allTabs = ss.val();
                     sendToAll("tabs", ss.val());
                     console.log("new fb data", ss.val());
                 });
-                var deviceDB = userTabsDB.child(data.device);
+                var deviceDB = userTabsDB.child(deviceInfo.profileID);
                 deviceDB.child("online").setOnDisconnect(false);
                 deviceDB.child("online").set(true);
+                //console.log("setting deviceInfo", JSON.stringify(deviceInfo));
+                deviceDB.child("deviceInfo").set(deviceInfo);
                 deviceTabsDB = deviceDB.child("tabs");
                 startWatchingTabs();
             } else {

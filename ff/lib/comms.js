@@ -18,7 +18,7 @@ const backend = require("./backend");
 
 function addControlPage(worker) {
     controlPages.push(worker);
-    //console.log("ff-tt control panel (#"+controlPages.length+") opened");
+    //console.log("control panel (#"+controlPages.length+") opened");
     function send(name, data) {
         //console.log("send", name, data);
         worker.port.emit("to-content", {name: name, data: data||{}});

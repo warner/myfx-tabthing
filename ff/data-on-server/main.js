@@ -3,23 +3,20 @@
  in the usual web-content context. */
 
 var sendToBackend;
-var myDeviceName;
+var myDeviceInfo;
 
 function msgFromBackend(name, data) {
     console.log("msgFromBackend", name, data);
 
-    if (name == "deviceName") {
-        $("#my-device-name").val(data);
-        myDeviceName = data;
+    if (name == "device-info") {
+        $("#my-device-name").text(data.profileID);
+        myDeviceInfo = data;
         console.log("set device name");
     }
 
     if (name == "auth-success") {
         $("#sign-in").hide();
         $("#user").text(data.user.email); // also .id, .hash, .provider
-        //$("#my-device-name").val(data.device);
-        $("#name-this-device").empty().text("Device name: "+data.device);
-        myDeviceName = data.device;
         $("#logged-in").show();
     }
 
@@ -32,7 +29,7 @@ function msgFromBackend(name, data) {
             var online = data[deviceName].online;
             var dul = $("#templates>.device-entry").clone();
             dul.find("span.device-name").text(deviceName);
-            if (deviceName == myDeviceName)
+            if (deviceName == myDeviceInfo.profileID)
                 dul.addClass("my-device");
             if (online)
                 dul.addClass("online");
@@ -101,10 +98,7 @@ function doFBPersonaAuth() {
         console.log("authClient.login done", error, token, user);
         if (error) showError(error);
         else
-            sendToBackend("fb-login", {token: token,
-                                       user: user,
-                                       device: $("#my-device-name").val()
-                                      });
+            sendToBackend("fb-login", {token: token, user: user});
     });
 }
 
@@ -113,10 +107,7 @@ function doP() {
         console.log("authClient.login done", error, token, user);
         if (error) showError(error);
         else
-            sendToBackend("fb-login", {token: token,
-                                       user: user,
-                                       device: $("#my-device-name").val()
-                                      });
+            sendToBackend("fb-login", {token: token, user: user});
     }
     function onlogin(assertion) {
         console.log("onlogin", assertion);

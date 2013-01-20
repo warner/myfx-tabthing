@@ -2,6 +2,21 @@ const widgets = require("widget");
 const tabs = require("tabs");
 const data = require("self").data;
 
+function buildDeviceInfo() {
+    var s = require("sdk/system");
+    var file = require("sdk/io/file");
+    var info = {
+        user: s.env.USER || s.env.USERNAME,
+        app: s.name,
+        host: require("./hostname").hostname,
+        profileName: require("./profilename").profileName,
+        profileDir: file.basename(s.pathFor("ProfD"))
+    };
+    info.profileID = (info.host+"-"+info.profileDir).replace(/[\.\$\[\]\#\/]/g, "");
+    return info;
+}
+require("./backend").setDeviceInfo(buildDeviceInfo());
+
 require("./comms").setupComms();
 
 widgets.Widget({

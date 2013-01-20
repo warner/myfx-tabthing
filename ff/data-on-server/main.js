@@ -55,34 +55,6 @@ function msgFromBackend(name, data) {
 }
 
 
-$(function() {
-    console.log("page loaded");
-    // we are running in a FF addon
-    sendToBackend = function(name, data) {
-        /* the addon injects code to catch our "from-content" messages
-         and relay them to the backend. It also fires "to-content"
-         events on the window when the backend wants to tell us
-         something. */
-        console.log(["to-backend(JP)", name, data||{}]);
-        var e = new CustomEvent("from-content",
-                                {detail: {name: name, data: data||{} }});
-        window.dispatchEvent(e);
-    };
-    function backendListener(e) {
-        var msg = JSON.parse(e.detail);
-        try {
-            msgFromBackend(msg.name, msg.data);
-        } catch (e) {
-            // apparently exceptions raised during event listener
-            // functions aren't printed to the error console
-            console.log("exception in msgFromBackend");
-            console.log(e);
-        }
-    }
-    window.addEventListener("to-content", backendListener);
-    window.setTimeout(mainSetup, 0);
-});
-
 function showError(text) {
     $("#error").show().text(text);
 }
@@ -142,12 +114,45 @@ function doP() {
     navigator.id.request();
 }
 
-function mainSetup() {
-    console.log("mainSetup");
+
+$(function() {
+    console.log("page loaded");
+    // we are running in a FF addon
+    sendToBackend = function(name, data) {
+        /* the addon injects code to catch our "from-content" messages
+         and relay them to the backend. It also fires "to-content"
+         events on the window when the backend wants to tell us
+         something. */
+        console.log(["to-backend(JP)", name, data||{}]);
+        var e = new CustomEvent("from-content",
+                                {detail: {name: name, data: data||{} }});
+        window.dispatchEvent(e);
+    };
+    function backendListener(e) {
+        var msg = JSON.parse(e.detail);
+        try {
+            msgFromBackend(msg.name, msg.data);
+        } catch (e) {
+            // apparently exceptions raised during event listener
+            // functions aren't printed to the error console
+            console.log("exception in msgFromBackend");
+            console.log(e);
+        }
+    }
+    window.addEventListener("to-content", backendListener);
+    // we wait for the page to finish loading *and* the addon's page-mod
+    // to finish wiring up its event listener before trying to talk to
+    // the addon backend
+    function commsReady(e) {
+        sendToBackend("page-ready");
+    }
+    window.addEventListener("comms-ready", commsReady);
+
+    // set up the UI
     $("#error").hide();
     $("#sign-in").show();
     $("#logged-in").hide();
     $("#sign-in").on("click", doFBPersonaAuth);
     //$("#sign-in").on("click", doP);
-    sendToBackend("page-ready");
-};
+
+});

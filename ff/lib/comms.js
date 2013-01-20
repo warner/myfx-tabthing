@@ -18,7 +18,6 @@ const backend = require("./backend");
 
 function addControlPage(worker) {
     controlPages.push(worker);
-    //console.log("control panel (#"+controlPages.length+") opened");
     function send(name, data) {
         //console.log("send", name, data);
         worker.port.emit("to-content", {name: name, data: data||{}});
@@ -38,6 +37,7 @@ function addControlPage(worker) {
                       controlPages.splice(index, 1);
                   //console.log("now "+controlPages.length+" workers");
                   });
+    //console.log("control panel (#"+controlPages.length+") ready");
 };
 
 const pagemod = require("page-mod");

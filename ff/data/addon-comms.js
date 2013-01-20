@@ -12,3 +12,6 @@ window.addEventListener("from-content",
                         function(e) {
                             self.port.emit("from-content", e.detail);
                         });
+window.dispatchEvent(new CustomEvent("comms-ready", {}));
+
+console.log("addon-comms.js done");

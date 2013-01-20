@@ -33,7 +33,7 @@ function myTabsWereModified() {
         return;
     var data = [];
     for each (var tab in tabs) {
-        if (tab.url != "about:blank")
+        if (tab.url != "about:blank" && tab.url != "about:newtab")
             data.push({url: tab.url,
                        title: tab.title,
                        faviconURL: tab.favicon

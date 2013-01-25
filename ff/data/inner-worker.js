@@ -1,5 +1,5 @@
 
-var db = new Firebase("https://warner.firebaseIO.com/tabthing/");
+var db = new Firebase("https://myfx-tabthing.firebaseIO.com/tabthing/");
 db.on("value", function(ss) {
     var e = new CustomEvent("from-content",
                             {detail: {name: name, data: data||{} }});

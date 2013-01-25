@@ -64,7 +64,7 @@ exports.fromContent = function(send, name, data) {
             return;
         }
         console.log("starting DB");
-        var tmpdb = new Firebase("https://warner.firebaseio.com/tabthing");
+        var tmpdb = new Firebase("https://myfx-tabthing.firebaseio.com/tabthing");
         console.log("DB connection created");
         tmpdb.auth(data.token, function(success) {
             if (success) {

@@ -62,7 +62,7 @@ function showError(text) {
 
 function doFBPersonaAuth() {
     console.log("about to authClient");
-    var db = new Firebase("https://warner.firebaseio.com/tabthing");
+    var db = new Firebase("https://myfx-tabthing.firebaseio.com/");
     console.log("created DB reference");
     var authClient = new FirebaseAuthClient(db);
     console.log("created authClient");
@@ -83,7 +83,7 @@ function doP() {
     }
     function onlogin(assertion) {
         console.log("onlogin", assertion);
-        var db = new Firebase("https://warner.firebaseio.com/tabthing");
+        var db = new Firebase("https://myfx-tabthing.firebaseio.com/");
         console.log("created DB reference", db);
         try {
             var authClient = new FirebaseAuthClient(db);

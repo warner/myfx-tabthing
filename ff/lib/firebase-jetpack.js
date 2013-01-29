@@ -1,7 +1,8 @@
 
-// this is firebase-node.js with long-polling disabled
-var WebSocket = require("websocket").WebSocket; // must provide this
+// this is firebase-node.js with long-polling disabled, some window.* -like
+// globals added, and a final "exports.Firebase = Firebase" at the end.
 
+var WebSocket = require("websocket").WebSocket; // must provide this
 var setTimeout = require("timers").setTimeout;
 var clearTimeout = require("timers").clearTimeout;
 var setInterval = require("timers").setInterval;

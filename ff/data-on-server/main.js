@@ -64,14 +64,13 @@ function doFBPersonaAuth() {
     console.log("about to authClient");
     var db = new Firebase("https://myfx-tabthing.firebaseio.com/");
     console.log("created DB reference");
-    var authClient = new FirebaseAuthClient(db);
-    console.log("created authClient");
-    authClient.login("persona", function(error, token, user) {
-        console.log("authClient.login done", error, token, user);
-        if (error) showError(error);
-        else
-            sendToBackend("fb-login", {token: token, user: user});
+    var authClient = new FirebaseAuthClient(db, function(error, user) {
+        console.log("authClient state changed", error, user);
+        console.log(JSON.stringify(user));
+        //sendToBackend("fb-login", {token: token, user: user});
     });
+    console.log("created authClient 2");
+    authClient.login("persona");
 }
 
 function doP() {

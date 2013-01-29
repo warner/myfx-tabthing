@@ -67,7 +67,9 @@ function doFBPersonaAuth() {
     var authClient = new FirebaseAuthClient(db, function(error, user) {
         console.log("authClient state changed", error, user);
         console.log(JSON.stringify(user));
-        //sendToBackend("fb-login", {token: token, user: user});
+        if (user)
+            sendToBackend("fb-login", {token: user.firebaseAuthToken,
+                                       user: user});
     });
     console.log("created authClient 2");
     authClient.login("persona");

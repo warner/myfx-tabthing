@@ -66,29 +66,29 @@ exports.fromContent = function(send, name, data) {
         console.log("starting DB");
         var tmpdb = new Firebase("https://myfx-tabthing.firebaseio.com/tabthing");
         console.log("DB connection created");
-        tmpdb.auth(data.token, function(success) {
-            if (success) {
-                authed = data;
-                sendToAll("auth-success", data);
-                // the page-ready message isn't sent on reload, so resend
-                // device-info now as a workaround
-                sendToAll("device-info", deviceInfo);
-                var userTabsDB = tmpdb.child(data.user.id);
-                userTabsDB.on("value", function(ss) {
-                    allTabs = ss.val();
-                    sendToAll("tabs", ss.val());
-                    console.log("new fb data", ss.val());
-                });
-                var deviceDB = userTabsDB.child(deviceInfo.profileID);
-                deviceDB.child("online").setOnDisconnect(false);
-                deviceDB.child("online").set(true);
-                //console.log("setting deviceInfo", JSON.stringify(deviceInfo));
-                deviceDB.child("deviceInfo").set(deviceInfo);
-                deviceTabsDB = deviceDB.child("tabs");
-                startWatchingTabs();
-            } else {
+        tmpdb.auth(data.token, function(error, dummy) {
+            if (error) {
                 sendToAll("auth", "failed");
+                return;
             }
+            authed = data;
+            sendToAll("auth-success", data);
+            // the page-ready message isn't sent on reload, so resend
+            // device-info now as a workaround
+            sendToAll("device-info", deviceInfo);
+            var userTabsDB = tmpdb.child(data.user.id);
+            userTabsDB.on("value", function(ss) {
+                allTabs = ss.val();
+                sendToAll("tabs", ss.val());
+                console.log("new fb data", ss.val());
+            });
+            var deviceDB = userTabsDB.child(deviceInfo.profileID);
+            deviceDB.child("online").setOnDisconnect(false);
+            deviceDB.child("online").set(true);
+            //console.log("setting deviceInfo", JSON.stringify(deviceInfo));
+            deviceDB.child("deviceInfo").set(deviceInfo);
+            deviceTabsDB = deviceDB.child("tabs");
+            startWatchingTabs();
         });
     }
 };

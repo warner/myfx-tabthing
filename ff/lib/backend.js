@@ -83,7 +83,7 @@ exports.fromContent = function(send, name, data) {
                 console.log("new fb data", ss.val());
             });
             var deviceDB = userTabsDB.child(deviceInfo.profileID);
-            deviceDB.child("online").setOnDisconnect(false);
+            deviceDB.child("online").onDisconnect().set(false);
             deviceDB.child("online").set(true);
             //console.log("setting deviceInfo", JSON.stringify(deviceInfo));
             deviceDB.child("deviceInfo").set(deviceInfo);

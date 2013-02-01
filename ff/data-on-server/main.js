@@ -75,46 +75,6 @@ function doFBPersonaAuth() {
     authClient.login("persona");
 }
 
-function doP() {
-    function callback(error, token, user) {
-        console.log("authClient.login done", error, token, user);
-        if (error) showError(error);
-        else
-            sendToBackend("fb-login", {token: token, user: user});
-    }
-    function onlogin(assertion) {
-        console.log("onlogin", assertion);
-        var db = new Firebase("https://myfx-tabthing.firebaseio.com/");
-        console.log("created DB reference", db);
-        try {
-            var authClient = new FirebaseAuthClient(db);
-            console.log("created authClient", authClient);
-            authClient.jsonp("/auth/persona/authenticate",
-                             {"assertion":assertion},
-                             function(error, response) {
-                                 console.log("jsonp returned", error, response);
-                                 if(error || !response["token"]) {
-                                     callback(error);
-                                 }else {
-                                     var token = response["token"];
-                                     var user = response["user"];
-                                     console.log("calling attemptAuth");
-                                     authClient.attemptAuth(token, user, callback);
-                                     console.log("called attemptAuth");
-                                 }
-                             });
-            console.log("did authClient.jsonp");
-        } catch(e) {
-            console.log("error", e);
-        }
-    }
-
-    navigator.id.watch({"onlogin": onlogin,
-                        "onlogout": function(){}
-                       });
-    navigator.id.request();
-}
-
 
 $(function() {
     console.log("page loaded");
@@ -154,6 +114,5 @@ $(function() {
     $("#sign-in").show();
     $("#logged-in").hide();
     $("#sign-in").on("click", doFBPersonaAuth);
-    //$("#sign-in").on("click", doP);
 
 });

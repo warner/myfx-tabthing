@@ -60,21 +60,6 @@ function showError(text) {
 }
 
 
-function doFBPersonaAuth() {
-    console.log("about to authClient");
-    var db = new Firebase("https://myfx-tabthing.firebaseio.com/");
-    console.log("created DB reference");
-    var authClient = new FirebaseAuthClient(db, function(error, user) {
-        console.log("authClient state changed", error, user);
-        console.log(JSON.stringify(user));
-        if (user)
-            sendToBackend("fb-login", {token: user.firebaseAuthToken,
-                                       user: user});
-    });
-    console.log("created authClient 2");
-    authClient.login("persona");
-}
-
 
 $(function() {
     console.log("page loaded");
@@ -113,6 +98,6 @@ $(function() {
     $("#error").hide();
     $("#sign-in").show();
     $("#logged-in").hide();
-    $("#sign-in").on("click", doFBPersonaAuth);
+    //$("#sign-in").on("click", doFBPersonaAuth);
 
 });

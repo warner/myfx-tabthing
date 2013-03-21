@@ -43,7 +43,7 @@ function addControlPage(worker) {
 const pagemod = require("page-mod");
 const data = require("self").data;
 exports.setupComms = function() {
-    pagemod.PageMod({ include: "http://myfx-tabthing.lothar.com/main.html",
+    pagemod.PageMod({ include: data.url("main.html"),
                       contentScriptFile: data.url("addon-comms.js"),
                       contentScriptWhen: "end",
                       onAttach: addControlPage
